@@ -1147,6 +1147,9 @@ void GeneralPage::initLayout(GeneralPageView &layout)
     SettingWidget::checkbox("BetterTTV", s.showBadgesBttv)
         ->addKeywords({"bttv"})
         ->addTo(layout);
+    SettingWidget::checkbox("Tribute", s.showBadgesTribute)
+        ->addKeywords({"tribute"})
+        ->addTo(layout);
     layout.addSeparator();
     SettingWidget::checkbox("Use custom FrankerFaceZ moderator badges",
                             s.useCustomFfzModeratorBadges)

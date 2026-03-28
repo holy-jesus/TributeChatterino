@@ -281,6 +281,7 @@ public:
         "/appearance/badges/useCustomFfzVipBadges", true};
     BoolSetting showBadgesBttv = {"/appearance/badges/bttv", true};
     BoolSetting showBadgesSevenTV = {"/appearance/badges/seventv", true};
+    BoolSetting showBadgesTribute = {"/appearance/badges/tribute", true};
     QSizeSetting lastPopupSize = {
         "/appearance/lastPopup/size",
         {300, 500},
