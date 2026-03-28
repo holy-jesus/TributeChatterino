@@ -255,6 +255,7 @@ void TwitchChannel::initialize()
 {
     this->refreshChatters();
     this->refreshBadges();
+    this->refreshTributeBadges(false);
 }
 
 bool TwitchChannel::isEmpty() const
@@ -759,6 +760,7 @@ void TwitchChannel::roomIdChanged()
     this->refreshFFZChannelEmotes(false);
     this->refreshBTTVChannelEmotes(false);
     this->refreshSevenTVChannelEmotes(false);
+    this->refreshTributeBadges(false);
     this->joinBttvChannel();
     this->listenSevenTVCosmetics();
     getApp()->getTwitchLiveController()->add(
@@ -2225,6 +2227,71 @@ void TwitchChannel::setFfzChannelBadges(FfzChannelBadgeMap map)
 {
     this->tgFfzChannelBadges_.guard();
     this->ffzChannelBadges_ = std::move(map);
+}
+
+void TwitchChannel::refreshTributeBadges(bool manualRefresh)
+{
+    tribute::TributeBadges::loadChannel(
+        weakOf<Channel>(this), this->getName().toLower(),
+        [this, weak = weakOf<Channel>(this)](auto &&data) {
+            if (auto shared = weak.lock())
+            {
+                this->setTributeChannelData(std::forward<decltype(data)>(data));
+            }
+        },
+        [manualRefresh, weak = weakOf<Channel>(this)]() {
+            if (manualRefresh)
+            {
+                if (auto shared = weak.lock())
+                {
+                    shared->addSystemMessage("Failed to refresh tribute badges.");
+                }
+            }
+        });
+}
+
+std::vector<tribute::TributeBadge> TwitchChannel::tributeBadges(const QString &loginName) const
+{
+    std::vector<tribute::TributeBadge> badges;
+    this->tgTributeChannelData_.guard();
+
+    auto it = this->tributeChannelData_.users.find(loginName.toLower());
+    if (it != this->tributeChannelData_.users.end())
+    {
+        const auto &user = it->second;
+        
+        // Add service badges first
+        for (const auto &svcId : user.serviceBadgeIds)
+        {
+            auto svcIt = this->tributeChannelData_.serviceBadges.find(svcId);
+            if (svcIt != this->tributeChannelData_.serviceBadges.end())
+            {
+                badges.push_back(svcIt->second);
+            }
+        }
+        
+        // Add channel badge tier or base
+        if (user.channelBadgeTierId)
+        {
+            auto tierIt = this->tributeChannelData_.channelBadgeTiers.find(*user.channelBadgeTierId);
+            if (tierIt != this->tributeChannelData_.channelBadgeTiers.end())
+            {
+                badges.push_back(tierIt->second);
+            }
+        }
+        else if (user.hasChannelBadge && this->tributeChannelData_.channelBadge)
+        {
+            badges.push_back(*this->tributeChannelData_.channelBadge);
+        }
+    }
+
+    return badges;
+}
+
+void TwitchChannel::setTributeChannelData(tribute::TributeChannelData &&data)
+{
+    this->tgTributeChannelData_.guard();
+    this->tributeChannelData_ = std::move(data);
 }
 
 std::optional<EmotePtr> TwitchChannel::ffzCustomModBadge() const

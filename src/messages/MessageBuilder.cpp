@@ -1676,6 +1676,7 @@ std::pair<MessagePtrMut, HighlightAlert> MessageBuilder::makeIrcMessage(
     builder.appendFfzBadges(twitchChannel, userID);
     builder.appendBttvBadges(userID);
     builder.appendSeventvBadges(userID);
+    builder.appendTributeBadges(twitchChannel, builder->loginName);
 
     builder.appendUsername(tags, args);
 
@@ -2526,6 +2527,23 @@ void MessageBuilder::appendSeventvBadges(const QString &userID)
 
         /// e.g. "7tv:NNYS 2024"
         this->message().externalBadges.emplace_back((*badge)->name.string);
+    }
+}
+
+void MessageBuilder::appendTributeBadges(TwitchChannel *twitchChannel,
+                                         const QString &loginName)
+{
+    if (twitchChannel == nullptr)
+    {
+        return;
+    }
+
+    for (const auto &badge : twitchChannel->tributeBadges(loginName))
+    {
+        this->emplace<BadgeElement>(badge.emote, MessageElementFlag::BadgeTribute);
+
+        /// e.g. "tribute:sponsor"
+        this->message().externalBadges.emplace_back(badge.emote->name.string);
     }
 }
 

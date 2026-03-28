@@ -321,6 +321,7 @@ private:
     void appendFfzBadges(TwitchChannel *twitchChannel, const QString &userID);
     void appendBttvBadges(const QString &userID);
     void appendSeventvBadges(const QString &userID);
+    void appendTributeBadges(TwitchChannel *twitchChannel, const QString &loginName);
 
     [[nodiscard]] static bool isIgnored(const QString &originalMessage,
                                         const QString &userID,

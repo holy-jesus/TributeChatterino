@@ -427,6 +427,8 @@ set(SOURCE_FILES
 
         providers/seventv/SeventvAPI.cpp
         providers/seventv/SeventvAPI.hpp
+        providers/tribute/TributeBadges.cpp
+        providers/tribute/TributeBadges.hpp
         providers/seventv/SeventvBadges.cpp
         providers/seventv/SeventvBadges.hpp
         providers/seventv/SeventvCosmetics.hpp

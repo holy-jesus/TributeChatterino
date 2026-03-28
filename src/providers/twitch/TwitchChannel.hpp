@@ -12,6 +12,7 @@
 #include "common/UniqueAccess.hpp"
 #include "providers/ffz/FfzBadges.hpp"
 #include "providers/ffz/FfzEmotes.hpp"
+#include "providers/tribute/TributeBadges.hpp"
 #include "providers/twitch/eventsub/SubscriptionHandle.hpp"
 #include "providers/twitch/TwitchEmotes.hpp"
 #include "util/QStringHash.hpp"
@@ -234,6 +235,10 @@ public:
     void setBttvEmotes(std::shared_ptr<const EmoteMap> &&map);
     void setFfzEmotes(std::shared_ptr<const EmoteMap> &&map);
     void setSeventvEmotes(std::shared_ptr<const EmoteMap> &&map);
+
+    void refreshTributeBadges(bool manualRefresh = false);
+    std::vector<tribute::TributeBadge> tributeBadges(const QString &loginName) const;
+    void setTributeChannelData(tribute::TributeChannelData &&data);
 
     const QString &seventvUserID() const;
     const QString &seventvEmoteSetID() const;
@@ -515,6 +520,9 @@ protected:
 
     FfzChannelBadgeMap ffzChannelBadges_;
     ThreadGuard tgFfzChannelBadges_;
+
+    tribute::TributeChannelData tributeChannelData_;
+    mutable ThreadGuard tgTributeChannelData_;
 
 private:
     // Badges
