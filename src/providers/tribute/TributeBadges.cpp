@@ -12,6 +12,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QSize>
 #include <QUrl>
 
 namespace chatterino::tribute {
@@ -46,7 +47,7 @@ namespace {
 
         auto emote = Emote{
             .name = EmoteName{u"tribute:" % id},
-            .images = ImageSet{Image::fromUrl(Url{url}, 1.0)},
+            .images = ImageSet{Image::fromUrl(Url{url}, 1.0, QSize(18, 18))},
             .tooltip = Tooltip{title},
             .homePage = Url{},
             .id = EmoteId{id},
