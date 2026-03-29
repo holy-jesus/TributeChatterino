@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2026 Contributors to Chatterino <https://chatterino.com>
-//
-// SPDX-License-Identifier: MIT
-
 #include "providers/tribute/TributeBadges.hpp"
 
 #include "common/network/NetworkRequest.hpp"
@@ -47,7 +43,7 @@ namespace {
 
         auto emote = Emote{
             .name = EmoteName{u"tribute:" % id},
-            .images = ImageSet{Image::fromUrl(Url{url}, 1.0, QSize(18, 18))},
+            .images = ImageSet{Image::fromUrl(Url{url}, 0.0, QSize(18, 18))},
             .tooltip = Tooltip{title},
             .homePage = Url{},
             .id = EmoteId{id},

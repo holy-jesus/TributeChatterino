@@ -560,8 +560,20 @@ void Image::actuallyLoad()
                 shared->empty_ = true;
                 return;
             }
-
+            
             auto parsed = detail::readFrames(reader, shared->url());
+            
+            if (shared->scale_ == 0.0)
+            {
+                for (auto &frame : parsed)
+                {
+                    frame.image =
+                        frame.image.scaled(64, 64, Qt::KeepAspectRatio,
+                                            Qt::SmoothTransformation);
+                }
+                shared->scale_ =
+                    qreal(std::min(18.0 / 64.0, 18.0 / 64.0));
+            }
 
             assignFrames(shared, parsed);
         })
