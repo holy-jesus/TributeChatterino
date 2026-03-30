@@ -543,6 +543,7 @@ private:
     QObject lifetimeGuard_;
     QTimer chattersListTimer_;
     QTimer threadClearTimer_;
+    QTimer tributeBadgesTimer_;
     QElapsedTimer titleRefreshedTimer_;
     QElapsedTimer clipCreationTimer_;
     bool isClipCreationInProgress{false};

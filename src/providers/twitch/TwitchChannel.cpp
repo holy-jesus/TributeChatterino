@@ -184,6 +184,11 @@ TwitchChannel::TwitchChannel(const QString &name)
     });
     this->threadClearTimer_.start(5 * 60 * 1000);
 
+    QObject::connect(&this->tributeBadgesTimer_, &QTimer::timeout, [this] {
+        this->refreshTributeBadges(false);
+    });
+    this->tributeBadgesTimer_.start(5 * 60 * 1000);
+
     this->signalHolder_.managedConnect(
         getApp()->getAccounts()->twitch.emotesReloaded,
         [this](auto *caller, const auto &result) {
