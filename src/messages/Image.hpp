@@ -119,7 +119,7 @@ private:
     void expireFrames();
 
     const Url url_{};
-    const qreal scale_{1};
+    qreal scale_{1};
     /// @brief The expected size of this image once its loaded.
     ///
     /// This doesn't represent the actual size (it can be different) - it's
